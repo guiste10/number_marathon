@@ -1,1 +1,19 @@
-<p>number-marathon-init-phase works!</p>
+<form [formGroup]="numberMarathonForm" (ngSubmit)="onSubmit()">
+
+    <div class="w-25 center">
+        <div class="form-group mb-3">
+            <label for="cellGroupWidth" class="form-label">Cell group size</label>
+            <input type="number" class="form-control" id="cellGroupWidth" [formControlName]="CELL_GROUP_WIDTH">
+        </div>
+        <div class="form-group">
+            <label for="concentrationTime" class="form-label">Concentration time (sec)</label>
+            <input type="number" class="form-control" id="concentrationTime" [formControlName]="CONCENTRATION_TIME">
+        </div>
+        <br>
+        <button class="btn btn-primary" type="submit">Start</button>
+        <div *ngIf="timeLeft">
+            <h3>{{timeLeft}}</h3>
+        </div>
+    </div>
+</form>
+
