@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NumberMarathonComponent } from './number-marathon.component';
+import { CellGroupComponent } from './cell-group.component';
 
-describe('NumberMarathonComponent', () => {
-  let component: NumberMarathonComponent;
-  let fixture: ComponentFixture<NumberMarathonComponent>;
+describe('CellGroupComponent', () => {
+  let component: CellGroupComponent;
+  let fixture: ComponentFixture<CellGroupComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NumberMarathonComponent ]
+      declarations: [ CellGroupComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NumberMarathonComponent);
+    fixture = TestBed.createComponent(CellGroupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
