@@ -13,7 +13,7 @@ export class NumberMarathonInitPhaseComponent implements OnInit{
   readonly CONCENTRATION_TIME: string = 'concentrationTime';
 
   static readonly DEFAULT_CELL_GROUP_WIDTH: number = 2;
-  static readonly DEFAULT_CONCENTRATION_TIME: number = 3;
+  static readonly DEFAULT_CONCENTRATION_TIME: number = 1;
 
   numberMarathonForm: FormGroup;
   timeLeft: number = 0;

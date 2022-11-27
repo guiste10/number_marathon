@@ -5,18 +5,13 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './number-marathon.component.html',
   styleUrls: ['./number-marathon.component.css']
 })
-export class NumberMarathonComponent implements OnInit{
+export class NumberMarathonComponent {
 
   isInitMode: boolean = true;
   cellGroupWidth: number;
-
-  ngOnInit(): void {
-    
-  }
 
   startTest($event: any) {
     this.cellGroupWidth = $event;
     this.isInitMode = false;
   }
-
 }
