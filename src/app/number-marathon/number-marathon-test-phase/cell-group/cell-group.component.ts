@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ArrowKeys } from 'src/app/types/types';
 
 @Component({
   selector: 'app-cell-group',
@@ -8,9 +9,15 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '
 export class CellGroupComponent implements OnInit, AfterViewInit{
 
   @Input() size: number;
+  @Input() index: number;
+
+  @Output() arrowKeyPressed = new EventEmitter<{index: number, key: ArrowKeys}>();
+
   @ViewChild('input') input: ElementRef;
 
   cellGroup: string;
+
+  constructor(public elementRef: ElementRef){}
 
   ngOnInit(): void {
     this.cellGroup = Array.from({length: this.size}, () => Math.floor(Math.random() * 10)).join('');
@@ -26,4 +33,11 @@ export class CellGroupComponent implements OnInit, AfterViewInit{
     }
   }
 
+  onKeydown($event: KeyboardEvent) {
+    const key = $event.key;
+    console.log('pressed: ' + $event.key);
+    if(Object.values(ArrowKeys).map((arrowKey => arrowKey as string)).includes(key)){
+      this.arrowKeyPressed.emit({index: this.index, key: key as ArrowKeys})
+    }
+  }
 }

@@ -1,1 +1,11 @@
-<app-cell-group [size] = 'cellGroupWidth' *ngFor="let group of numSequence(612)"></app-cell-group>
+<div #inputsContainer>
+    <ng-container *ngFor="let group of numSequence(612); index as i">
+        <app-cell-group 
+        #appCellGroup 
+        [size] = 'cellGroupWidth' 
+        [index]= 'i'
+        (arrowKeyPressed)='arrowPressed($event)'
+        ></app-cell-group>
+    </ng-container>
+</div>
+
