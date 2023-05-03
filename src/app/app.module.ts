@@ -7,6 +7,8 @@ import { HeaderComponent } from './header/header.component';
 import { ImagePracticeComponent } from './image-practice/image-practice.component';
 import { AboutComponent } from './about/about.component';
 import { NumberMarathonModule } from './number-marathon/number-marathon.module';
+import { TestPhaseService } from './services/test-phase.service';
+import { TimerComponent } from './number-marathon/number-marathon-test-phase/timer/timer.component';
 
 @NgModule({
   declarations: [
@@ -14,13 +16,14 @@ import { NumberMarathonModule } from './number-marathon/number-marathon.module';
     HeaderComponent,
     ImagePracticeComponent,
     AboutComponent,
+    TimerComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NumberMarathonModule
   ],
-  providers: [],
+  providers: [TestPhaseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

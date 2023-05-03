@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule , ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TestPhaseService } from 'src/app/services/test-phase.service';
 
 @Component({
   selector: 'app-number-marathon-init-phase',
@@ -21,7 +22,8 @@ export class NumberMarathonInitPhaseComponent implements OnInit{
   @Output() startTest = new EventEmitter<string>();
 
   constructor(    
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private testPhaseService: TestPhaseService
   ){}
 
   ngOnInit(): void {
@@ -50,9 +52,11 @@ export class NumberMarathonInitPhaseComponent implements OnInit{
       }
     }, 1000);
   }
+
   startTestPhase() {
     const cellGroupWidth: string = this.numberMarathonForm.get(this.CELL_GROUP_WIDTH)?.value;
     this.startTest.emit(cellGroupWidth);
+    this.testPhaseService.changeTestPhase('memo');
   }
 }
 

@@ -4,3 +4,5 @@ export enum ArrowKeys {
     Right = 'ArrowRight',
     Left = 'ArrowLeft',
 }
+
+export type TestPhase = 'new' | 'memo' | 'recall';
