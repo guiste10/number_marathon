@@ -3,11 +3,11 @@
   <div 
   style="margin-right: 20px;"
   >
-    <app-timer 
-    *ngIf="showTimer$ | async"
-    >
-      00:25
-    </app-timer>
+    <h2 
+      *ngIf="showTimer$ | async"
+      >
+        {{timer$ | async}}
+    </h2>
   </div>
   <ul class="nav nav-pills">
     <li class="nav-item"><a routerLink="/number-marathon" routerLinkActive="active"  class="nav-link" aria-current="page">Number Marathon</a></li>

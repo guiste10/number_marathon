@@ -8,7 +8,6 @@ import { ImagePracticeComponent } from './image-practice/image-practice.componen
 import { AboutComponent } from './about/about.component';
 import { NumberMarathonModule } from './number-marathon/number-marathon.module';
 import { TestPhaseService } from './services/test-phase.service';
-import { TimerComponent } from './number-marathon/number-marathon-test-phase/timer/timer.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +15,6 @@ import { TimerComponent } from './number-marathon/number-marathon-test-phase/tim
     HeaderComponent,
     ImagePracticeComponent,
     AboutComponent,
-    TimerComponent,
   ],
   imports: [
     BrowserModule,

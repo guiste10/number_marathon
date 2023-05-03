@@ -9,9 +9,11 @@ import { TestPhaseService } from '../services/test-phase.service';
 })
 export class HeaderComponent {
   showTimer$: Observable<boolean>
+  timer$: Observable<string>
 
   constructor(private testPhaseService: TestPhaseService) {
     this.showTimer$ = testPhaseService.isMemoPhase();
+    this.timer$ = testPhaseService.timer$;
   }
 
 }
