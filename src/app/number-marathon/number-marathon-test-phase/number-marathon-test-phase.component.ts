@@ -1,4 +1,6 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { tap } from 'rxjs';
+import { TestPhaseService } from 'src/app/services/test-phase.service';
 import { ArrowKeys } from 'src/app/types/types';
 import { CellGroupComponent } from './cell-group/cell-group.component';
 
@@ -16,6 +18,8 @@ export class NumberMarathonTestPhaseComponent implements AfterViewInit{
   
   numInputsPerRow: number;
   cellGroups: CellGroupComponent[];
+
+  constructor(public testPhaseService: TestPhaseService){}
 
   ngAfterViewInit() {
     this.appCellGroups.first.input.nativeElement.focus();
@@ -57,6 +61,12 @@ export class NumberMarathonTestPhaseComponent implements AfterViewInit{
     }
     if (elementToFocus) {
       elementToFocus.input.nativeElement.focus();
+    }
+  }
+
+  onKeydown($event: KeyboardEvent) {
+    if($event.key === ' '){
+      this.testPhaseService.nextTestPhase();
     }
   }
 }

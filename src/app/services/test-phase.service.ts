@@ -1,33 +1,41 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, map, Observable, Subject } from "rxjs";
-import { TestPhase } from 'src/app/types/types';
+import { BehaviorSubject, map, Observable, ReplaySubject, Subject, tap } from "rxjs";
+import { getNextPhase, TestPhase } from 'src/app/types/types';
 
 @Injectable()
 export class TestPhaseService {
     timer$: Observable<string>;
+    testPhase$: Observable<TestPhase>;
 
     private startTime: number;
     private timerSubject$: Subject<string>;
-    private testPhase$: Observable<TestPhase>;
     private testPhaseSubject$: Subject<TestPhase>;
+    private currentTestPhase: TestPhase;
 
     constructor() {
-        this.testPhaseSubject$ = new BehaviorSubject('new');
+        this.testPhaseSubject$ = new ReplaySubject(1);
+        this.testPhaseSubject$.next('new');
         this.testPhase$ = this.testPhaseSubject$.asObservable();
         this.timerSubject$ = new Subject();
         this.timer$ = this.timerSubject$.asObservable();
     }
 
-    changeTestPhase(testPhase: TestPhase): void{
+    
+    nextTestPhase(): void{
+        this.testPhaseSubject$.next(getNextPhase(this.currentTestPhase))
+    }
+
+    changeTestPhase(testPhase: TestPhase): void {
+        this.currentTestPhase = testPhase;
         this.testPhaseSubject$.next(testPhase);
         if(testPhase === 'memo') {
             this.startTimer();
         }
     }
 
-    isMemoPhase(): Observable<boolean> {
+    isPhase(phase: TestPhase): Observable<boolean> {
         return this.testPhase$.pipe(
-            map((testPhase) => testPhase === 'memo'),
+            map((testPhase) => testPhase === phase),
         )
     }
 

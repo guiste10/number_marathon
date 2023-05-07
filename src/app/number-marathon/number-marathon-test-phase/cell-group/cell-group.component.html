@@ -1,1 +1,4 @@
-<input readonly #input [defaultValue]="cellGroup" (keydown)="onKeydown($event)">
+<input 
+#input 
+[(ngModel)]="cellGroup" 
+(keydown)="onKeydown($event)">

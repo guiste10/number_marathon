@@ -1,6 +1,10 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ArrowKeys } from 'src/app/types/types';
+import { Observable, tap } from 'rxjs';
+import { TestPhaseService } from 'src/app/services/test-phase.service';
+import { ArrowKeys, TestPhase } from 'src/app/types/types';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-cell-group',
   templateUrl: './cell-group.component.html',
@@ -15,27 +19,31 @@ export class CellGroupComponent implements OnInit, AfterViewInit{
 
   @ViewChild('input') input: ElementRef;
 
+  randomDigitsToMemorize: string;
   cellGroup: string;
 
-  constructor(public elementRef: ElementRef){}
+  constructor(public elementRef: ElementRef, public testPhaseService: TestPhaseService){
+    this.testPhaseService.testPhase$.pipe(
+      tap((testPhase) => {
+        if(testPhase === 'recall') {
+          this.cellGroup = '';
+        }
+      }),
+      untilDestroyed(this)
+    ).subscribe();
+  }
 
   ngOnInit(): void {
-    this.cellGroup = Array.from({length: this.size}, () => Math.floor(Math.random() * 10)).join('');
+    this.randomDigitsToMemorize = Array.from({length: this.size}, () => Math.floor(Math.random() * 10)).join('');
+    this.cellGroup = this.randomDigitsToMemorize;
   }
 
   ngAfterViewInit(): void {
-    const input = this.input.nativeElement;
-    input.style.width = input.value.length + 1 + 'ch';
-    if(input){
-      input.addEventListener('input', function() {
-        this.style.width = this.value.length + 1 + 'ch';
-      })
-    }
+    this.input.nativeElement.style.width = this.cellGroup.length + 1 + 'ch';
   }
 
   onKeydown($event: KeyboardEvent) {
     const key = $event.key;
-    console.log('pressed: ' + $event.key);
     if(Object.values(ArrowKeys).map((arrowKey => arrowKey as string)).includes(key)){
       this.arrowKeyPressed.emit({index: this.index, key: key as ArrowKeys})
     }

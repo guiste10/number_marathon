@@ -1,2 +1,7 @@
-<app-number-marathon-init-phase *ngIf="isInitMode" (startTest)="startTest($event)"></app-number-marathon-init-phase>
-<app-number-marathon-test-phase *ngIf="!isInitMode" [cellGroupWidth]="cellGroupWidth"></app-number-marathon-test-phase>
+<app-number-marathon-init-phase 
+*ngIf="isInitMode" 
+(startTest)="startTest($event)"></app-number-marathon-init-phase>
+<app-number-marathon-test-phase 
+*ngIf="!isInitMode" 
+[cellGroupWidth]="cellGroupWidth"
+></app-number-marathon-test-phase>

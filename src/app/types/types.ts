@@ -5,4 +5,19 @@ export enum ArrowKeys {
     Left = 'ArrowLeft',
 }
 
-export type TestPhase = 'new' | 'memo' | 'recall';
+export type TestPhase = 'new' | 'memo' | 'recall' | 'summary';
+
+export function getNextPhase(currentPhase: TestPhase): TestPhase {
+    switch (currentPhase) {
+      case 'new':
+        return 'memo';
+      case 'memo':
+        return 'recall';
+      case 'recall':
+        return 'summary';
+      case 'summary':
+        return 'new';
+      default:
+        throw new Error('Invalid test phase');
+    }
+  }

@@ -1,11 +1,6 @@
-
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-light justify-content-center">
-  <div 
-  style="margin-right: 20px;"
-  >
-    <h2 
-      *ngIf="showTimer$ | async"
-      >
+  <div style="margin-right: 30px;">
+    <h2 *ngIf="isMemoPhase$ | async">
         {{timer$ | async}}
     </h2>
   </div>
