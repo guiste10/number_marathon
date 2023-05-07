@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { TestPhaseService } from '../services/test-phase.service';
+import { TestPhase } from '../types/types';
 
 @Component({
   selector: 'app-number-marathon',
@@ -7,11 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NumberMarathonComponent {
 
-  isInitMode: boolean = true;
   cellGroupWidth: number;
+  testPhase$: Observable<TestPhase>;
+
+  constructor(public testPhaseService: TestPhaseService){
+    this.testPhase$ = testPhaseService.testPhase$;
+  }
 
   startTest($event: any) {
     this.cellGroupWidth = $event;
-    this.isInitMode = false;
+    this.testPhaseService.changeTestPhase('memo');
   }
 }

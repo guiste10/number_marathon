@@ -23,7 +23,6 @@ export class NumberMarathonInitPhaseComponent implements OnInit{
 
   constructor(    
     private formBuilder: FormBuilder,
-    private testPhaseService: TestPhaseService
   ){}
 
   ngOnInit(): void {
@@ -56,7 +55,6 @@ export class NumberMarathonInitPhaseComponent implements OnInit{
   startTestPhase() {
     const cellGroupWidth: string = this.numberMarathonForm.get(this.CELL_GROUP_WIDTH)?.value;
     this.startTest.emit(cellGroupWidth);
-    this.testPhaseService.changeTestPhase('memo');
   }
 }
 

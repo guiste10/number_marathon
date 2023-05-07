@@ -14,7 +14,6 @@ export class TestPhaseService {
 
     constructor() {
         this.testPhaseSubject$ = new ReplaySubject(1);
-        this.testPhaseSubject$.next('new');
         this.testPhase$ = this.testPhaseSubject$.asObservable();
         this.timerSubject$ = new Subject();
         this.timer$ = this.timerSubject$.asObservable();
