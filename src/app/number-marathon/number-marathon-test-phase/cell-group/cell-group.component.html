@@ -1,4 +1,8 @@
-<input 
-#input 
-[(ngModel)]="cellGroup" 
+<div 
+#input
+class="border border-secondary"
+contenteditable="true"
 (keydown)="onKeydown($event)">
+<span style="color: red">1</span><span style="color: green">2</span>
+</div>
+  

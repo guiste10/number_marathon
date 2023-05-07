@@ -8,6 +8,7 @@ import { ImagePracticeComponent } from './image-practice/image-practice.componen
 import { AboutComponent } from './about/about.component';
 import { NumberMarathonModule } from './number-marathon/number-marathon.module';
 import { TestPhaseService } from './services/test-phase.service';
+import { TestSummaryService } from './services/test-summary.service';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { TestPhaseService } from './services/test-phase.service';
     AppRoutingModule,
     NumberMarathonModule
   ],
-  providers: [TestPhaseService],
+  providers: [TestPhaseService, TestSummaryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

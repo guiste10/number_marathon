@@ -19,6 +19,12 @@ export class NumberMarathonComponent {
 
   startTest($event: any) {
     this.cellGroupWidth = $event;
-    this.testPhaseService.changeTestPhase('memo');
+    this.testPhaseService.nextTestPhase();
+  }
+
+  onKeydown($event: KeyboardEvent) {
+    if($event.key === ' '){
+      this.testPhaseService.nextTestPhase();
+    }
   }
 }

@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
 import { TestPhaseService } from 'src/app/services/test-phase.service';
 import { ArrowKeys } from 'src/app/types/types';
 import { CellGroupComponent } from './cell-group/cell-group.component';
 
+@UntilDestroy()
 @Component({
   selector: 'app-number-marathon-test-phase',
   templateUrl: './number-marathon-test-phase.component.html',
@@ -22,6 +24,10 @@ export class NumberMarathonTestPhaseComponent implements AfterViewInit{
   constructor(public testPhaseService: TestPhaseService){}
 
   ngAfterViewInit() {
+    this.testPhaseService.testPhase$.pipe(
+      tap((_) => this.appCellGroups.first.input.nativeElement.focus()),
+      untilDestroyed(this)
+    ).subscribe();
     this.appCellGroups.first.input.nativeElement.focus();
     this.numInputsPerRow = this.getNumInputsPerRow();
     this.cellGroups = this.appCellGroups.toArray()
@@ -49,7 +55,7 @@ export class NumberMarathonTestPhaseComponent implements AfterViewInit{
 
   arrowPressed(params: {index: number, key: ArrowKeys}): void {
     const { index, key } = params;
-    let elementToFocus;
+    let elementToFocus: CellGroupComponent;
     if (ArrowKeys.Right === key) {
       elementToFocus = this.cellGroups[index + 1];
     } else if(ArrowKeys.Left === key) {
@@ -61,12 +67,6 @@ export class NumberMarathonTestPhaseComponent implements AfterViewInit{
     }
     if (elementToFocus) {
       elementToFocus.input.nativeElement.focus();
-    }
-  }
-
-  onKeydown($event: KeyboardEvent) {
-    if($event.key === ' '){
-      this.testPhaseService.nextTestPhase();
     }
   }
 }

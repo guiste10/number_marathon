@@ -18,6 +18,6 @@ export function getNextPhase(currentPhase: TestPhase): TestPhase {
       case 'summary':
         return 'new';
       default:
-        throw new Error('Invalid test phase');
+        throw new Error('Test phase not recognized');
     }
   }

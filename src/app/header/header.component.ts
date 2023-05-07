@@ -18,7 +18,7 @@ export class HeaderComponent {
       map((event) => event as NavigationEnd),
       tap((event) => {
         if(event.url === '/number-marathon'){
-          this.testPhaseService.changeTestPhase('new')
+          this.testPhaseService.nextTestPhase('new')
         }
       })
     );
