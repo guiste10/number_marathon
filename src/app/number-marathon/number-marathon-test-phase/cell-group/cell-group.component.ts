@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { TestPhaseService } from 'src/app/services/test-phase.service';
 import { ArrowKeys, TestPhase } from 'src/app/types/types';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -17,60 +17,78 @@ export class CellGroupComponent implements OnInit, AfterViewInit{
 
   @Output() arrowKeyPressed = new EventEmitter<{index: number, key: ArrowKeys}>();
 
-  @ViewChild('input') input: ElementRef<any>;
+  @ViewChild('input') input: ElementRef<HTMLDivElement>;
 
-  randomDigitsToMemorize: string;
+  cellGroupToMemorize: string;
   cellGroup: string;
   editable: boolean = false;
 
   constructor(public elementRef: ElementRef, public testPhaseService: TestPhaseService, private renderer: Renderer2){}
 
   ngOnInit(): void {
-    this.randomDigitsToMemorize = Array.from({length: this.size}, () => Math.floor(Math.random() * 10)).join('');
-    this.cellGroup = this.randomDigitsToMemorize;
+    this.cellGroupToMemorize = Array.from({length: this.size}, () => Math.floor(Math.random() * 10)).join('');
   }
 
   ngAfterViewInit(): void {
-    this.input.nativeElement.style.width = this.cellGroup.length + 0.5 + 'ch';
+    this.input.nativeElement.style.width = this.cellGroupToMemorize.length + 0.5 + 'ch';
     this.testPhaseService.testPhase$.pipe(
-      tap((testPhase) => {
-        this.editable = testPhase === 'recall'
-        this.renderer.setStyle(this.input.nativeElement, 'caret-color', testPhase === 'recall' ? 'black' : 'transparent');
-        if(testPhase === 'recall') {
-          this.input.nativeElement.textContent = '';
-        } else if(testPhase === 'summary') {
-          this.checkMemorizedDigitsMatch()
-        }
-      }),
+      tap((testPhase) => this.handleTestPhaseChange(testPhase)),
       untilDestroyed(this)
     ).subscribe();
   }
 
+  private handleTestPhaseChange(testPhase: TestPhase){
+    const recallPhase = testPhase === 'recall';
+    this.editable = recallPhase;
+    this.renderer.setStyle(this.input.nativeElement, 'caret-color', recallPhase ? 'black' : 'transparent');
+    if (recallPhase) {
+      this.clearInputContentAndSpans(); 
+    } else if(testPhase === 'result') {
+      this.checkMemorizedDigitsMatch();
+    }
+  }
+
   onKeydown($event: KeyboardEvent) {
-    const key = $event.key;
-    if(Object.values(ArrowKeys).map((arrowKey => arrowKey as string)).includes(key)){
-      this.arrowKeyPressed.emit({index: this.index, key: key as ArrowKeys})
+    if (isArrowKey($event)){
+      this.arrowKeyPressed.emit({index: this.index, key: $event.key as ArrowKeys})
     } else if(!this.editable || ignoreInput($event)){
       $event.preventDefault();
     }
   }
 
   private checkMemorizedDigitsMatch() {
-    if (this.cellGroup == ''){
-      this.cellGroup = this.randomDigitsToMemorize;
-      this.renderer.setStyle(this.input.nativeElement, 'color', 'grey');
-    } else if (this.randomDigitsToMemorize === this.cellGroup){
-      this.renderer.setStyle(this.input.nativeElement, 'color', 'green');
-    } else {
-
+    const memorizedDigits = this.input.nativeElement.textContent ?? '';
+    this.clearInputContentAndSpans();
+    var digit: string;
+    var color: string;
+    for (var i = 0; i < this.cellGroupToMemorize.length; i++) {
+      if (i < memorizedDigits.length){
+        digit = memorizedDigits[i];
+        color = memorizedDigits[i] === this.cellGroupToMemorize[i] ? 'green' : 'red';
+      } else {
+        digit = this.cellGroupToMemorize[i];
+        color = 'grey';
+      }
+      const spanElement = this.renderer.createElement('span');
+      this.renderer.setProperty(spanElement, 'textContent', digit);
+      this.renderer.setStyle(spanElement, 'color', color);
+      this.renderer.appendChild(this.input.nativeElement, spanElement);
     }
+  }
+
+  private clearInputContentAndSpans(): void{
+    this.input.nativeElement.textContent = ''; 
   }
 }
 
-function ignoreInput($event): boolean {
+function isArrowKey($event: KeyboardEvent): boolean {
+  return Object.values(ArrowKeys).map((arrowKey => arrowKey as string)).includes($event.key);
+}
+
+function ignoreInput($event: KeyboardEvent): boolean {
   return !(['Backspace', 'Shift'].includes($event.key) || isDigit($event));
 }
 
-function isDigit($event): boolean {
+function isDigit($event: KeyboardEvent): boolean {
   return 48 <= $event.keyCode && $event.keyCode <= 57 && /\d/.test($event.key);
 }

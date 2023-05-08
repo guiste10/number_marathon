@@ -5,7 +5,7 @@ export enum ArrowKeys {
     Left = 'ArrowLeft',
 }
 
-export type TestPhase = 'new' | 'memo' | 'recall' | 'summary';
+export type TestPhase = 'new' | 'memo' | 'recall' | 'result' | 'summary';
 
 export function getNextPhase(currentPhase: TestPhase): TestPhase {
     switch (currentPhase) {
@@ -14,6 +14,8 @@ export function getNextPhase(currentPhase: TestPhase): TestPhase {
       case 'memo':
         return 'recall';
       case 'recall':
+        return 'result';
+      case 'result':
         return 'summary';
       case 'summary':
         return 'new';
