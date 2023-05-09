@@ -13,14 +13,15 @@ import { TestSummary } from 'src/app/types/types';
 })
 export class NumberMarathonSummaryPhaseComponent{
 
-  totalTime = this.testPhaseService.totalTime;
+  totalTime: string;
   testSummary$: Observable<TestSummary>
 
   constructor(    
     private testResultSummaryService: TestResultSummaryService,
     private testPhaseService: TestPhaseService,
   ){
-    this.testSummary$ = this.testResultSummaryService.testSummary$
+    this.totalTime = this.testPhaseService.totalTime;
+    this.testSummary$ = this.testResultSummaryService.testSummary$;
   }
 }
 
