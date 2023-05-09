@@ -3,6 +3,7 @@ import { tap } from 'rxjs';
 import { TestPhaseService } from 'src/app/services/test-phase.service';
 import { ArrowKeys, TestPhase } from 'src/app/types/types';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { TestResultSummaryService } from 'src/app/services/test-result-summary.service';
 
 @UntilDestroy()
 @Component({
@@ -23,7 +24,11 @@ export class CellGroupComponent implements OnInit, AfterViewInit{
   cellGroup: string;
   editable: boolean = false;
 
-  constructor(public elementRef: ElementRef, public testPhaseService: TestPhaseService, private renderer: Renderer2){}
+  constructor(
+    public elementRef: ElementRef, 
+    public testPhaseService: TestPhaseService, 
+    private renderer: Renderer2,
+    private testResultSummaryService: TestResultSummaryService){}
 
   ngOnInit(): void {
     this.cellGroupToMemorize = Array.from({length: this.size}, () => Math.floor(Math.random() * 10)).join('');
@@ -42,9 +47,9 @@ export class CellGroupComponent implements OnInit, AfterViewInit{
     this.editable = recallPhase;
     this.renderer.setStyle(this.input.nativeElement, 'caret-color', recallPhase ? 'black' : 'transparent');
     if (recallPhase) {
-      this.clearInputContentAndSpans(); 
+      this.input.nativeElement.textContent = ''; 
     } else if(testPhase === 'result') {
-      this.checkMemorizedDigitsMatch();
+      this.testResultSummaryService.checkMemorizedDigitsMatch(this.input.nativeElement, this.cellGroupToMemorize);
     }
   }
 
@@ -54,30 +59,6 @@ export class CellGroupComponent implements OnInit, AfterViewInit{
     } else if(!this.editable || ignoreInput($event)){
       $event.preventDefault();
     }
-  }
-
-  private checkMemorizedDigitsMatch() {
-    const memorizedDigits = this.input.nativeElement.textContent ?? '';
-    this.clearInputContentAndSpans();
-    var digit: string;
-    var color: string;
-    for (var i = 0; i < this.cellGroupToMemorize.length; i++) {
-      if (i < memorizedDigits.length){
-        digit = memorizedDigits[i];
-        color = memorizedDigits[i] === this.cellGroupToMemorize[i] ? 'green' : 'red';
-      } else {
-        digit = this.cellGroupToMemorize[i];
-        color = 'grey';
-      }
-      const spanElement = this.renderer.createElement('span');
-      this.renderer.setProperty(spanElement, 'textContent', digit);
-      this.renderer.setStyle(spanElement, 'color', color);
-      this.renderer.appendChild(this.input.nativeElement, spanElement);
-    }
-  }
-
-  private clearInputContentAndSpans(): void{
-    this.input.nativeElement.textContent = ''; 
   }
 }
 

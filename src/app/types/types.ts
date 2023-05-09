@@ -5,6 +5,10 @@ export enum ArrowKeys {
     Left = 'ArrowLeft',
 }
 
+export type DigitColor = 'black' | 'red' | 'green' | 'grey';
+
+export type TestSummary = {greenCount: number, redCount: number}
+
 export type TestPhase = 'new' | 'memo' | 'recall' | 'result' | 'summary';
 
 export function getNextPhase(currentPhase: TestPhase): TestPhase {

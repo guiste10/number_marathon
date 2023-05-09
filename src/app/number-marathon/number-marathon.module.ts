@@ -6,6 +6,7 @@ import { NumberMarathonTestPhaseComponent } from './number-marathon-test-phase/n
 import { NumberMarathonInitPhaseComponent } from './number-marathon-init-phase/number-marathon-init-phase.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NumberMarathonComponent } from './number-marathon.component';
+import { NumberMarathonSummaryPhaseComponent } from './number-marathon-summary-phase/number-marathon-summary-phase.component';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { NumberMarathonComponent } from './number-marathon.component';
     NumberMarathonTestPhaseComponent,
     CellGroupComponent,
     NumberMarathonComponent,
+    NumberMarathonSummaryPhaseComponent,
   ],
   imports: [
     AppRoutingModule,
