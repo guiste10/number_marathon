@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { ImagePracticeComponent } from './image-practice/image-practice.component';
-import { AboutComponent } from './about/about.component';
+import { InstructionsComponent } from './instructions/insctructions.component';
 import { NumberMarathonModule } from './number-marathon/number-marathon.module';
 
 @NgModule({
@@ -13,7 +13,7 @@ import { NumberMarathonModule } from './number-marathon/number-marathon.module';
     AppComponent,
     HeaderComponent,
     ImagePracticeComponent,
-    AboutComponent,
+    InstructionsComponent,
   ],
   imports: [
     BrowserModule,
