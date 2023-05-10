@@ -25,3 +25,12 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Deploy on GitHub Pages
+Build and deploy the application as follows, or just use the deploy script in the package.json.
+
+ng build --base-href "https://guiste10.github.io/number_marathon/"
+
+npx angular-cli-ghpages --dir=dist/number-marathon
+
+Visit https://guiste10.github.io/number_marathon/

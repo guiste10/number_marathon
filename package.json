@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy-gh-pages": "ng build --base-href https://guiste10.github.io/number_marathon/ && npx angular-cli-ghpages --dir=dist/number-marathon"
   },
   "private": true,
   "dependencies": {
