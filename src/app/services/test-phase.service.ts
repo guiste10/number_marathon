@@ -6,7 +6,7 @@ import { TestTimerService } from "./test-timer.service";
 @Injectable()
 export class TestPhaseService {
     private testPhaseSubject$: BehaviorSubject<TestPhase> = new BehaviorSubject('new');
-    private currentTestPhase: TestPhase;
+    private currentTestPhase: TestPhase = 'new';
 
     constructor(private testTimerService: TestTimerService) {}
 
