@@ -5,13 +5,17 @@
             <label for="cellGroupWidth" class="form-label">Cell group size</label>
             <input type="number" class="form-control" id="cellGroupWidth" [formControlName]="CELL_GROUP_WIDTH">
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
+            <label for="numberOfCellGroups" class="form-label">Number of cell groups</label>
+            <input type="number" class="form-control" id="numberOfCellGroups" [formControlName]="NUMBER_OF_CELL_GROUPS">
+        </div>
+        <div class="form-group mb-3">
             <label for="concentrationTime" class="form-label">Concentration time (sec)</label>
             <input type="number" class="form-control" id="concentrationTime" [formControlName]="CONCENTRATION_TIME">
         </div>
         <br>
         <button class="btn btn-primary" type="submit">Start</button>
-        <div *ngIf="timeLeft">
+        <div *ngIf="timeLeft" style="margin-top: 20px;">
             <h3>{{timeLeft}}</h3>
         </div>
     </div>

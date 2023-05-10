@@ -1,5 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { TestPhaseService } from 'src/app/services/test-phase.service';
+import { InitPhaseConfig } from 'src/app/types/types';
 
 @Component({
   selector: 'app-number-marathon-init-phase',
@@ -10,18 +12,18 @@ export class NumberMarathonInitPhaseComponent implements OnInit{
 
   readonly CELL_GROUP_WIDTH: string = 'cellGroupWidth';
   readonly CONCENTRATION_TIME: string = 'concentrationTime';
+  readonly NUMBER_OF_CELL_GROUPS: string = 'numberOfCellGroups';
 
   static readonly DEFAULT_CELL_GROUP_WIDTH: number = 2;
-  static readonly DEFAULT_CONCENTRATION_TIME: number = 1;
+  static readonly DEFAULT_CONCENTRATION_TIME: number = 3;
+  static readonly DEFAULT_NUMBER_OF_CELL_GROUPS: number = 1500;
 
   numberMarathonForm: FormGroup;
   timeLeft: number = 0;
 
-  @Output() startTest = new EventEmitter<string>();
+  @Output() startTest = new EventEmitter<InitPhaseConfig>();
 
-  constructor(    
-    private formBuilder: FormBuilder,
-  ){}
+  constructor(private formBuilder: FormBuilder){}
 
   ngOnInit(): void {
     this.initForm();
@@ -30,6 +32,7 @@ export class NumberMarathonInitPhaseComponent implements OnInit{
   initForm() {
     this.numberMarathonForm = this.formBuilder.group({
       cellGroupWidth: NumberMarathonInitPhaseComponent.DEFAULT_CELL_GROUP_WIDTH,
+      numberOfCellGroups: NumberMarathonInitPhaseComponent.DEFAULT_NUMBER_OF_CELL_GROUPS,
       concentrationTime: NumberMarathonInitPhaseComponent.DEFAULT_CONCENTRATION_TIME
     }); 
   }
@@ -39,7 +42,7 @@ export class NumberMarathonInitPhaseComponent implements OnInit{
     this.concentrate();
   }
 
-  concentrate() {
+  private concentrate(): void {
     const intervalId = setInterval(() => {
       if (this.timeLeft > 1) {
         this.timeLeft--;
@@ -50,9 +53,10 @@ export class NumberMarathonInitPhaseComponent implements OnInit{
     }, 1000);
   }
 
-  startTestPhase() {
-    const cellGroupWidth: string = this.numberMarathonForm.get(this.CELL_GROUP_WIDTH)?.value;
-    this.startTest.emit(cellGroupWidth);
+  private startTestPhase(): void {
+    const cellGroupWidth = this.numberMarathonForm.get(this.CELL_GROUP_WIDTH)?.value;
+    const numberOfCellGroups = this.numberMarathonForm.get(this.NUMBER_OF_CELL_GROUPS)?.value;
+    this.startTest.emit({cellGroupWidth, numberOfCellGroups});
   }
 }
 

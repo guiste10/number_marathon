@@ -1,14 +1,12 @@
 <app-number-marathon-init-phase 
+#initPhaseComponent
 *ngIf="(testPhase$ | async) === 'new'" 
-(keydown)="onKeydown($event)"
 (startTest)="startTest($event)">
 </app-number-marathon-init-phase>
 <app-number-marathon-test-phase 
 *ngIf="!['new', 'summary'].includes((testPhase$ | async))"  
-(keydown)="onKeydown($event)"
-[cellGroupWidth]="cellGroupWidth"
+[initPhaseConfig]="initPhaseConfig"
 ></app-number-marathon-test-phase>
 <app-number-marathon-summary-phase 
 *ngIf="(testPhase$ | async) === 'summary'"  
-(keydown)="onKeydown($event)"
 ></app-number-marathon-summary-phase>

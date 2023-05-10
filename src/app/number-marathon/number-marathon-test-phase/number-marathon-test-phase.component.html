@@ -1,8 +1,8 @@
 <div #inputsContainer style="display: flex; flex-wrap: wrap">
-    <ng-container *ngFor="let group of numSequence(812); index as i">
+    <ng-container *ngFor="let group of numSequence(initPhaseConfig.numberOfCellGroups); index as i">
         <app-cell-group 
         #appCellGroup 
-        [size] = 'cellGroupWidth' 
+        [size] = 'initPhaseConfig.cellGroupWidth' 
         [index]= 'i'
         (arrowKeyPressed)='arrowPressed($event)'
         ></app-cell-group>

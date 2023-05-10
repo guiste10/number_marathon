@@ -7,6 +7,8 @@ export enum ArrowKeys {
 
 export type DigitColor = 'black' | 'red' | 'green' | 'grey';
 
+export type InitPhaseConfig = {cellGroupWidth: number, numberOfCellGroups: number}
+
 export type TestSummary = {greenCount: number, redCount: number}
 
 export type TimedTestSummary = TestSummary & {totalTime: string};

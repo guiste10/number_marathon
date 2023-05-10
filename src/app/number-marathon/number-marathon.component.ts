@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Observable, take, tap } from 'rxjs';
 import { TestPhaseService } from '../services/test-phase.service';
-import { TestPhase } from '../types/types';
+import { InitPhaseConfig, TestPhase } from '../types/types';
+import { NumberMarathonInitPhaseComponent } from './number-marathon-init-phase/number-marathon-init-phase.component';
 
+@UntilDestroy()
 @Component({
   selector: 'app-number-marathon',
   templateUrl: './number-marathon.component.html',
@@ -10,21 +13,35 @@ import { TestPhase } from '../types/types';
 })
 export class NumberMarathonComponent {
 
-  cellGroupWidth: number;
+  initPhaseConfig: InitPhaseConfig;
   testPhase$: Observable<TestPhase>;
+
+  @ViewChild('initPhaseComponent') initPhaseComponent: NumberMarathonInitPhaseComponent;
 
   constructor(public testPhaseService: TestPhaseService){
     this.testPhase$ = testPhaseService.testPhase$;
   }
 
-  startTest($event: any) {
-    this.cellGroupWidth = $event;
+  startTest($event: InitPhaseConfig) {
+    this.initPhaseConfig = $event;
     this.testPhaseService.nextTestPhase();
   }
 
+  @HostListener('window:keydown', ['$event'])
   onKeydown($event: KeyboardEvent) {
     if($event.key === ' '){
-      this.testPhaseService.nextTestPhase();
+      this.testPhase$.pipe(
+        take(1),
+        tap((testPhase) => {
+          if (testPhase === 'new'){
+            this.initPhaseComponent.onSubmit();
+          } else {
+            this.testPhaseService.nextTestPhase();
+            $event.preventDefault();
+          }
+        }),
+        untilDestroyed(this)
+      ).subscribe();
     }
   }
 }

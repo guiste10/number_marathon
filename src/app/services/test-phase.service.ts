@@ -1,19 +1,19 @@
 import { Injectable } from "@angular/core";
-import { map, Observable, ReplaySubject, Subject, tap } from "rxjs";
+import { BehaviorSubject, map, Observable, ReplaySubject, shareReplay, Subject, tap } from "rxjs";
 import { getNextPhase, TestPhase } from 'src/app/types/types';
 import { TestTimerService } from "./test-timer.service";
 
 @Injectable()
 export class TestPhaseService {
-    private testPhaseSubject$: ReplaySubject<TestPhase> = new ReplaySubject(1)
+    private testPhaseSubject$: BehaviorSubject<TestPhase> = new BehaviorSubject('new');
     private currentTestPhase: TestPhase;
 
-    constructor(private testTimerService: TestTimerService) {
-        this.testPhaseSubject$ = new ReplaySubject(1);
-    }
+    constructor(private testTimerService: TestTimerService) {}
 
     get testPhase$(): Observable<TestPhase> {
-        return this.testPhaseSubject$.asObservable();
+        return this.testPhaseSubject$.asObservable().pipe(
+            shareReplay(1)
+        );
     }
 
     

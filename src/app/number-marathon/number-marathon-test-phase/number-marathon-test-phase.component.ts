@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChi
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
 import { TestPhaseService } from 'src/app/services/test-phase.service';
-import { ArrowKeys } from 'src/app/types/types';
+import { ArrowKeys, InitPhaseConfig } from 'src/app/types/types';
 import { CellGroupComponent } from './cell-group/cell-group.component';
 
 @UntilDestroy()
@@ -13,10 +13,9 @@ import { CellGroupComponent } from './cell-group/cell-group.component';
 })
 export class NumberMarathonTestPhaseComponent implements AfterViewInit{
 
-  @Input() cellGroupWidth: number;
+  @Input() initPhaseConfig: InitPhaseConfig;
 
   @ViewChildren('appCellGroup') appCellGroups: QueryList<CellGroupComponent>;
-  @ViewChild('inputsContainer') inputsContainer: ElementRef;
   
   numInputsPerRow: number;
   cellGroups: CellGroupComponent[];
