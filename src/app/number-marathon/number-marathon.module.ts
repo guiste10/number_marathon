@@ -7,6 +7,9 @@ import { NumberMarathonInitPhaseComponent } from './number-marathon-init-phase/n
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NumberMarathonComponent } from './number-marathon.component';
 import { NumberMarathonSummaryPhaseComponent } from './number-marathon-summary-phase/number-marathon-summary-phase.component';
+import { TestPhaseService } from '../services/test-phase.service';
+import { TestResultSummaryService } from '../services/test-result-summary.service';
+import { TestTimerService } from '../services/test-timer.service';
 
 
 @NgModule({
@@ -22,6 +25,7 @@ import { NumberMarathonSummaryPhaseComponent } from './number-marathon-summary-p
     CommonModule,
     FormsModule,
     ReactiveFormsModule
-  ]
+  ],
+  providers: [TestPhaseService, TestResultSummaryService, TestTimerService],
 })
 export class NumberMarathonModule { }

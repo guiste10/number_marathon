@@ -9,6 +9,10 @@ export type DigitColor = 'black' | 'red' | 'green' | 'grey';
 
 export type TestSummary = {greenCount: number, redCount: number}
 
+export type TimedTestSummary = TestSummary & {totalTime: string};
+
+export type BestScore = {greenCount: number, totalTime: string}
+
 export type TestPhase = 'new' | 'memo' | 'recall' | 'result' | 'summary';
 
 export function getNextPhase(currentPhase: TestPhase): TestPhase {

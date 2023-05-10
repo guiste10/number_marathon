@@ -1,15 +1,19 @@
 import { Injectable, Renderer2, RendererFactory2 } from "@angular/core";
-import { BehaviorSubject, map, Observable, ReplaySubject, shareReplay, Subject, take, tap} from "rxjs";
-import { DigitColor, TestSummary } from "../types/types";
+import { BehaviorSubject, Observable, shareReplay} from "rxjs";
+import { BestScore, DigitColor, TestSummary, TimedTestSummary } from "../types/types";
+import Cookies from 'js-cookie';
+import { TestPhaseService } from "./test-phase.service";
+import { TestTimerService } from "./test-timer.service";
 
 @Injectable()
 export class TestResultSummaryService {
     testSummary$: Observable<TestSummary>;
+
     private renderer: Renderer2;
+    private initialTestSummaryValue = {redCount: 0, greenCount: 0};
+    private testSummarySubject$ = new BehaviorSubject<TestSummary>(this.initialTestSummaryValue);
 
-    private testSummarySubject$ = new BehaviorSubject<TestSummary>({redCount: 0, greenCount: 0});
-
-    constructor(private rendererFactory: RendererFactory2) {
+    constructor(private rendererFactory: RendererFactory2, private testTimerService: TestTimerService) {
         this.renderer = this.rendererFactory.createRenderer(null, null);
         this.testSummary$ = this.testSummarySubject$.asObservable().pipe(shareReplay(1));
     }
@@ -34,15 +38,32 @@ export class TestResultSummaryService {
         }
     }
 
-    addDigitToResultSummary(color: DigitColor): void {
-        this.testSummarySubject$.pipe(
-            take(1),
-            tap((testSummary) => {
-                const newSummary = color === 'red' 
-                ? {...testSummary, redCount: testSummary.redCount + 1} 
-                : {...testSummary, greenCount: testSummary.greenCount+1};
-                this.testSummarySubject$.next(newSummary);
-            })
-        ).subscribe();
+    saveAndGetBestScore(): BestScore {
+        const currentScore = this.testSummarySubject$.value.greenCount;
+        const currentTotalTime = this.testTimerService.time;
+        const storedBestScore = Cookies.get('bestScore')
+        if( !storedBestScore || currentScore > storedBestScore) {
+            Cookies.set('bestScore', currentScore, { expires: 3650 });
+            Cookies.set('bestScoreTime', currentTotalTime, { expires: 3650 })
+            return {greenCount: currentScore, totalTime: currentTotalTime};
+        }
+        const storedBestScoreTime = Cookies.get('bestScoreTime');
+        return {greenCount: storedBestScore, totalTime: storedBestScoreTime}
+    }
+
+    getTimedScoreSummary(): TimedTestSummary{
+        return {...this.testSummarySubject$.value, totalTime: this.testTimerService.time};
+    }
+
+    resetSummary(): void {
+        this.testSummarySubject$.next(this.initialTestSummaryValue);
+    }
+
+    private addDigitToResultSummary(color: DigitColor): void {
+        const testSummary: TestSummary = this.testSummarySubject$.value;
+        const testSummaryNew =  color === 'red' 
+            ? {...testSummary, redCount: testSummary.redCount + 1} 
+            : {...testSummary, greenCount: testSummary.greenCount + 1};
+        this.testSummarySubject$.next(testSummaryNew)
     }
 }

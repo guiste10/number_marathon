@@ -22,7 +22,7 @@ export class CellGroupComponent implements OnInit, AfterViewInit{
 
   cellGroupToMemorize: string;
   cellGroup: string;
-  editable: boolean = false;
+  editAllowed: boolean = false;
 
   constructor(
     public elementRef: ElementRef, 
@@ -44,7 +44,7 @@ export class CellGroupComponent implements OnInit, AfterViewInit{
 
   private handleTestPhaseChange(testPhase: TestPhase){
     const recallPhase = testPhase === 'recall';
-    this.editable = recallPhase;
+    this.editAllowed = recallPhase;
     this.renderer.setStyle(this.input.nativeElement, 'caret-color', recallPhase ? 'black' : 'transparent');
     if (recallPhase) {
       this.input.nativeElement.textContent = ''; 
@@ -56,18 +56,24 @@ export class CellGroupComponent implements OnInit, AfterViewInit{
   onKeydown($event: KeyboardEvent) {
     if (isArrowKey($event)){
       this.arrowKeyPressed.emit({index: this.index, key: $event.key as ArrowKeys})
-    } else if(!this.editable || ignoreInput($event)){
+    } else if(shouldIgnoreInput($event, this.editAllowed)){
       $event.preventDefault();
+    } else if(shouldFocusNextElementAfterInput($event, this.input.nativeElement, this.size)){
+      setTimeout(() => this.arrowKeyPressed.emit({index: this.index, key: ArrowKeys.Right}));
     }
   }
+}
+
+function shouldFocusNextElementAfterInput($event: KeyboardEvent, input: HTMLDivElement, size: number): boolean{
+  return isDigit($event) && input.textContent.length == size - 1;
 }
 
 function isArrowKey($event: KeyboardEvent): boolean {
   return Object.values(ArrowKeys).map((arrowKey => arrowKey as string)).includes($event.key);
 }
 
-function ignoreInput($event: KeyboardEvent): boolean {
-  return !(['Backspace', 'Shift'].includes($event.key) || isDigit($event));
+function shouldIgnoreInput($event: KeyboardEvent, editAllowed: boolean): boolean {
+  return !editAllowed || !(['Backspace', 'Shift'].includes($event.key) || isDigit($event));
 }
 
 function isDigit($event: KeyboardEvent): boolean {

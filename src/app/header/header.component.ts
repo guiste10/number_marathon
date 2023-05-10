@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { combineLatest, combineLatestAll, filter, map, Observable, tap } from 'rxjs';
 import { TestPhaseService } from '../services/test-phase.service';
+import { TestTimerService } from '../services/test-timer.service';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,10 @@ export class HeaderComponent {
   isMemoPhase$: Observable<boolean>
   timer$: Observable<string>
 
-  constructor(private testPhaseService: TestPhaseService, public router: Router) {
+  constructor(
+    private testPhaseService: TestPhaseService, 
+    private testTimerService: TestTimerService, 
+    public router: Router) {
     const routerNavigationEvent$ = this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
       map((event) => event as NavigationEnd),
@@ -27,7 +31,7 @@ export class HeaderComponent {
         return testPhase === 'memo' && event.url === '/number-marathon'
       })
     )
-    this.timer$ = this.testPhaseService.timer$;
+    this.timer$ = this.testTimerService.timer$;
   }
 
 }

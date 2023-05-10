@@ -1,6 +1,9 @@
-<div *ngIf = "testSummary$ | async as testSummary" class="w-25 center">
+<div class="w-25 center">
     <h2 style="margin-top: 20px;">Nice effort, keep it going !</h2>
-    <p style="margin-top: 40px;">Total time: {{totalTime}}</p>
+    <p style="margin-top: 40px;">Memorization time: {{testSummary.totalTime}}</p>
     <p><span style="color: green;">Correct</span> digits: {{testSummary.greenCount}}</p>
     <p><span style="color: red;">Wrong</span> digits: {{testSummary.redCount}}</p>
+    <hr>
+    <p><span style="font-weight: bold;">Best</span>: {{bestScore.greenCount}} correct digits</p>
+    <p><span style="font-weight: bold;">Time</span>: {{bestScore.totalTime}}</p>
 </div>
